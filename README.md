@@ -1,83 +1,57 @@
--- GUI "Guilherme 👑" com minimizar
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gerador de Key | Guilherme 👑</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      text-align: center;
+      margin-top: 100px;
+    }
+    .key-box {
+      background-color: #222;
+      padding: 20px 40px;
+      border-radius: 10px;
+      display: inline-block;
+      font-size: 28px;
+      letter-spacing: 3px;
+      font-weight: bold;
+      user-select: all; /* Permite copiar facilmente */
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .key-box:hover {
+      background-color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 Key Atual (válida por 12 horas)</h1>
+  <div class="key-box" id="keyAtual" title="Clique para copiar">Carregando...</div>
+  
+  <script>
+    function gerarKey() {
+      const now = Math.floor(Date.now() / 1000);
+      const base = Math.floor(now / (60 * 60 * 12));
+      const hash = String(base).split('').reverse().join('').substring(0, 6);
+      return "gui" + hash;
+    }
 
-pcall(function() game.CoreGui["Guilherme👑"]:Destroy() end)
+    const keyElement = document.getElementById("keyAtual");
+    const key = gerarKey();
+    keyElement.textContent = key;
 
-local player = game.Players.LocalPlayer
-
--- GUI principal
-local gui = Instance.new("ScreenGui")
-gui.Name = "Guilherme👑"
-gui.ResetOnSpawn = false
-gui.Parent = game:GetService("CoreGui")
-
--- Painel
-local panel = Instance.new("Frame")
-panel.Size = UDim2.new(0, 220, 0, 180)
-panel.Position = UDim2.new(0, 150, 0, 60)
-panel.BackgroundColor3 = Color3.fromRGB(30, 30, 140)
-panel.Active = true
-panel.Draggable = true
-panel.Visible = true
-panel.Parent = gui
-
-Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 10)
-
--- Título
-local title = Instance.new("TextLabel")
-title.Parent = panel
-title.Size = UDim2.new(1, 0, 0, 30)
-title.Text = "Guilherme 👑"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.BackgroundColor3 = Color3.fromRGB(15, 15, 90)
-title.TextSize = 20
-title.Font = Enum.Font.GothamBold
-Instance.new("UICorner", title).CornerRadius = UDim.new(0, 8)
-
--- Botão flutuante de minimizar
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "ToggleButton"
-toggleButton.Size = UDim2.new(0, 40, 0, 40)
-toggleButton.Position = UDim2.new(0, 20, 0, 20)
-toggleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 120)
-toggleButton.Text = "-"
-toggleButton.TextScaled = true
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.Parent = gui
-Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 8)
-
--- Mostrar/ocultar painel
-toggleButton.MouseButton1Click:Connect(function()
-	panel.Visible = not panel.Visible
-end)
-
--- Função para criar botões
-local function createButton(text, yPos, color, callback)
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(0.9, 0, 0, 40)
-	btn.Position = UDim2.new(0.05, 0, 0, yPos)
-	btn.Text = text
-	btn.BackgroundColor3 = color
-	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	btn.Font = Enum.Font.GothamBold
-	btn.TextSize = 18
-	btn.BorderSizePixel = 0
-	btn.Parent = panel
-	Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
-	btn.MouseButton1Click:Connect(callback)
-end
-
--- Botões
-createButton("⬆ Subir", 40, Color3.fromRGB(0, 200, 0), function()
-	local char = player.Character
-	if char and char:FindFirstChild("HumanoidRootPart") then
-		char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame + Vector3.new(0, 200, 0)
-	end
-end)
-
-createButton("⬇ Descer", 90, Color3.fromRGB(200, 0, 0), function()
-	local char = player.Character
-	if char and char:FindFirstChild("HumanoidRootPart") then
-		char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame + Vector3.new(0, -180, 0)
-	end
-end)
+    // Copiar key ao clicar na caixa
+    keyElement.addEventListener("click", () => {
+      navigator.clipboard.writeText(key).then(() => {
+        keyElement.textContent = "Copiado! ✔️";
+        setTimeout(() => { keyElement.textContent = key; }, 2000);
+      }).catch(() => {
+        alert("Falha ao copiar a key");
+      });
+    });
+  </script>
+</body>
+</html>
